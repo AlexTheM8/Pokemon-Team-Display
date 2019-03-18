@@ -1,8 +1,7 @@
-import java.awt.*;        
-import java.awt.event.*;
-import java.net.URL;
+import java.awt.BorderLayout;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class TeamDisplay extends JFrame {
     private JPanel panel;
