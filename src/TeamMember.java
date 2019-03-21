@@ -5,35 +5,49 @@ import java.awt.Image;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
+
 public class TeamMember {
     private String nickname;
     private Image img;
-    private String pokeName;
+    private String dexNum;
     private int slot;
     private int x;
     private int y = 60;
 
-    public TeamMember(String p, String n, int s) {
-        pokeName = p;
-        nickname = n;
+    public TeamMember(String num, String nick, int s) {
+        dexNum = num;
+        nickname = nick;
+        setSlot(s);
+        setImage();
+    }
+
+    public void setSlot(int s) {
         slot = s;
-        x = 117 + ((s-1)*167);
-            
-        
-        setImage(); //TODO Generalize
+        if (slot > -1) {
+            x = 117 + ((s - 1) * 167);
+        }
     }
     
+    public void setDexNum(String n) {
+        dexNum = n;
+        setImage();
+    }
+    
+    public void setNick(String n) {
+        nickname = n;
+    }
+
     private void setImage() {
-        URL url = getClass().getResource("Images/Pokemon/002.gif");
+        URL url = getClass().getResource("Images/Pokemon/" + dexNum + ".gif");
         ImageIcon icon = new ImageIcon(url);
         img = icon.getImage();
     }
-    
+
     public void paint(Graphics g) {
         g.drawImage(img, x, y, null);
         Font small = new Font("TimesRoman", Font.PLAIN, 25);
         g.setFont(small);
         g.setColor(Color.WHITE);
-        g.drawString(nickname, x, y + 168);
+        g.drawString(nickname, x, y + 165);
     }
 }

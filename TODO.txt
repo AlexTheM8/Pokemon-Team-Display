@@ -1,12 +1,8 @@
- - Change all gifs (minus 1 & 2)
+ - Change all gifs
     - Remove optimization
     - Size 111 x 114
- - Get gifs Gen 3-5
- - Generalize setImage()
- - Implement member selector
- - Allow changes
+    - NEED TO REDO SPRITES
  - (OPTIONAL) Evolution button
  - (OPTIONAL) Animations
- - If death -> move slots up 1
  - (OPTIONAL) Save member list: have each member on an ArrayList for future reference
  
