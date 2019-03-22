@@ -1,8 +1,4 @@
- - Change all gifs
-    - Remove optimization
-    - Size 111 x 114
-    - NEED TO REDO SPRITES
  - (OPTIONAL) Evolution button
  - (OPTIONAL) Animations
  - (OPTIONAL) Save member list: have each member on an ArrayList for future reference
- 
+ - Center Nickname
