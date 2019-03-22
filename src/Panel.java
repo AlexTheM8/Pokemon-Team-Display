@@ -1,15 +1,19 @@
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
-//import java.util.ArrayList;
+// import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class Panel extends JPanel {
     private TeamMember team[] = new TeamMember[6];
     private Image bg;
-    private String bgSource = "Images/partybox.png";
+    private String bgSource = "Images/partybox.PNG";
     private Timer timer;
     private int inParty;
     // private ArrayList<TeamMember> allPokemon;
@@ -50,23 +54,23 @@ public class Panel extends JPanel {
     }
 
     public void removeFromTeam(int slot) {
-        if (team[slot-1] != null) {
-            for (int i = slot-1; i < inParty-1; i++) {
-                team[i] = team[i+1];
-                team[i].setSlot(i+1);
+        if (team[slot - 1] != null) {
+            for (int i = slot - 1; i < inParty - 1; i++) {
+                team[i] = team[i + 1];
+                team[i].setSlot(i + 1);
             }
             inParty--;
             team[inParty] = null;
         }
     }
-    
+
     public void changeMember(int slot, String newPoke, String newName) {
         if (!newPoke.equals("N/A")) {
-            team[slot-1].setDexNum(newPoke);
+            team[slot - 1].setDexNum(newPoke);
         }
-        
+
         if (!newName.equals("")) {
-            team[slot-1].setNick(newName);
+            team[slot - 1].setNick(newName);
         }
     }
 
