@@ -147,12 +147,14 @@ public class TeamDisplay extends JFrame {
         // Underneath
         JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         JPanel inp1 = new JPanel(new GridLayout(5, 2));
+        
+        // Pokemon
         inp1.add(new JLabel("Pokemon Name"));
-        // JTextField pName = new JTextField(10);
-        // TODO Test this
         StringSearchable searchable = new StringSearchable(dex);
         AutocompleteJComboBox pName = new AutocompleteJComboBox(searchable);
         inp1.add(pName);
+        
+        // Nickname
         inp1.add(new JLabel("Nickname"));
         JTextField nName = new JTextField(10);
         inp1.add(nName);
