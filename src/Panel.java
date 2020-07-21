@@ -24,13 +24,12 @@ public class Panel extends JPanel {
         ImageIcon icon = new ImageIcon(url);
         bg = icon.getImage();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++)
             team[i] = null;
-        }
 
         inParty = 0;
 
-        timer = new Timer(130, new ActionListener() {
+        timer = new Timer(0, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 repaint();
@@ -65,22 +64,18 @@ public class Panel extends JPanel {
     }
 
     public void changeMember(int slot, String newPoke, String newName) {
-        if (!newPoke.equals("N/A")) {
+        if (!newPoke.equals("N/A"))
             team[slot - 1].setDexNum(newPoke);
-        }
 
-        if (!newName.equals("")) {
+        if (!newName.equals(""))
             team[slot - 1].setNick(newName);
-        }
     }
 
     public void paintComponent(Graphics g) {
         g.drawImage(bg, 0, 0, null);
-        for (int i = 0; i < 6; i++) {
-            if (team[i] != null) {
+        for (int i = 0; i < 6; i++)
+            if (team[i] != null)
                 team[i].paint(g);
-            }
-        }
     }
 
 }

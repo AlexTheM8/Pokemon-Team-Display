@@ -23,9 +23,8 @@ public class TeamMember {
 
     public void setSlot(int s) {
         slot = s;
-        if (slot > -1) {
+        if (slot > -1)
             x = 117 + ((s - 1) * 167);
-        }
     }
     
     public void setDexNum(String n) {
@@ -45,7 +44,7 @@ public class TeamMember {
 
     public void paint(Graphics g) {
         g.drawImage(img, x, y, null);
-        Font small = new Font("TimesRoman", Font.PLAIN, 25);
+        Font small = new Font("GillSansMT", Font.PLAIN, 25);
         g.setFont(small);
         g.setColor(Color.WHITE);
         g.drawString(nickname, x, y + 165);

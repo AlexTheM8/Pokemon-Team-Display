@@ -138,7 +138,7 @@ public class TeamDisplay extends JFrame {
         super("Team Display");
 
         panel = new Panel();
-        setLayout(new GridLayout(3, 1));
+        setLayout(new GridLayout(2, 1));
         add(panel);
 
         // Underneath
@@ -183,9 +183,8 @@ public class TeamDisplay extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String num = index.getText();
                 int n = Integer.parseInt(num);
-                if (n > 0 && n <= 6) {
+                if (n > 0 && n <= 6)
                     ((Panel) panel).removeFromTeam(n);
-                }
                 index.setText("");
             }
         });
@@ -216,7 +215,7 @@ public class TeamDisplay extends JFrame {
 
         // Frame defaults
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1920, 1080);
+        setSize(1280, 720);
         setResizable(true);
         setLocationRelativeTo(null);
     }
