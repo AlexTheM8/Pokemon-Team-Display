@@ -27,6 +27,7 @@ import javax.swing.text.JTextComponent;
 public class AutocompleteJComboBox extends JComboBox {
     static final long serialVersionUID = 4321421L;
     private final Searchable<String, String> searchable;
+    private final JTextComponent tc;
 
     /**
      * Constructs a new object based upon the parameter searchable
@@ -40,7 +41,7 @@ public class AutocompleteJComboBox extends JComboBox {
         setEditable(true);
         Component c = getEditor().getEditorComponent();
         if (c instanceof JTextComponent) {
-            final JTextComponent tc = (JTextComponent) c;
+            tc = (JTextComponent) c;
             tc.getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void changedUpdate(DocumentEvent arg0) {
@@ -81,6 +82,7 @@ public class AutocompleteJComboBox extends JComboBox {
                                 addItem(s);
                             setEditable(true);
                             setPopupVisible(true);
+                            tc.requestFocus();
                         }
                     });
                 }
@@ -105,5 +107,13 @@ public class AutocompleteJComboBox extends JComboBox {
             throw new IllegalStateException(
                     "Editing component is not a JTextComponent!");
         }
+    }
+    
+    public String getText() {
+        return tc.getText();
+    }
+    
+    public void setText(String txt) {
+        tc.setText(txt);
     }
 }

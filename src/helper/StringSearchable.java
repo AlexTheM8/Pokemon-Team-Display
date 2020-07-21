@@ -30,7 +30,7 @@ public class StringSearchable implements Searchable<String, String> {
     public Collection<String> search(String value) {
         List<String> founds = new ArrayList<String>();
         for (String s : terms)
-            if (s.indexOf(value) == 0)
+            if (s.indexOf(value.toLowerCase()) == 0)
                 founds.add(s);
         return founds;
     }

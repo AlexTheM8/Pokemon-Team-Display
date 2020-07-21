@@ -12,6 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import helper.AutocompleteJComboBox;
+import helper.StringSearchable;
+
 @SuppressWarnings("serial")
 public class TeamDisplay extends JFrame {
     private JPanel panel;
@@ -145,7 +148,10 @@ public class TeamDisplay extends JFrame {
         JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         JPanel inp1 = new JPanel(new GridLayout(5, 2));
         inp1.add(new JLabel("Pokemon Name"));
-        JTextField pName = new JTextField(10);
+        // JTextField pName = new JTextField(10);
+        // TODO Test this
+        StringSearchable searchable = new StringSearchable(dex);
+        AutocompleteJComboBox pName = new AutocompleteJComboBox(searchable);
         inp1.add(pName);
         inp1.add(new JLabel("Nickname"));
         JTextField nName = new JTextField(10);
@@ -163,8 +169,10 @@ public class TeamDisplay extends JFrame {
                     inParty++;
                     String num = getDexNum(pName.getText());
                     if (!num.equals("N/A")) {
-                        TeamMember t = new TeamMember(num, nName.getText(),
-                                inParty);
+                        String name = nName.getText();
+                        if (name.isEmpty())
+                            name = pName.getText().substring(0, 1).toUpperCase() + pName.getText().substring(1);
+                        TeamMember t = new TeamMember(num, name, inParty);
                         ((Panel) panel).addToTeam(t);
                     }
                 }
