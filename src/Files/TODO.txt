@@ -2,3 +2,4 @@
  - (OPTIONAL) Animations
  - (OPTIONAL) Save member list: have each member on an ArrayList for future reference
  - Center Nickname
+ - Enter key listener

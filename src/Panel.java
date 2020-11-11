@@ -1,9 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URL;
-// import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -29,12 +26,7 @@ public class Panel extends JPanel {
 
         inParty = 0;
 
-        timer = new Timer(0, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                repaint();
-            }
-        });
+        timer = new Timer(0, e -> repaint());
         timer.start();
 
     }
@@ -76,6 +68,14 @@ public class Panel extends JPanel {
         for (int i = 0; i < 6; i++)
             if (team[i] != null)
                 team[i].paint(g);
+    }
+
+    public TeamMember[] getTeam() {
+        return team;
+    }
+
+    public void clearTeam() {
+        team = new TeamMember[6];
     }
 
 }

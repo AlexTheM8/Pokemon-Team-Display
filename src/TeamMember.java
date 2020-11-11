@@ -26,14 +26,22 @@ public class TeamMember {
         if (slot > -1)
             x = 117 + ((s - 1) * 167);
     }
-    
+
     public void setDexNum(String n) {
         dexNum = n;
         setImage();
     }
-    
+
+    public String getDexNum() {
+        return dexNum;
+    }
+
     public void setNick(String n) {
         nickname = n;
+    }
+
+    public String getNick() {
+        return nickname;
     }
 
     private void setImage() {
@@ -44,8 +52,7 @@ public class TeamMember {
 
     public void paint(Graphics g) {
         g.drawImage(img, x, y, null);
-        Font small = new Font("GillSansMT", Font.PLAIN, 25);
-        g.setFont(small);
+        g.setFont(new Font("GillSansMT", Font.PLAIN, 25));
         g.setColor(Color.WHITE);
         g.drawString(nickname, x, y + 165);
     }

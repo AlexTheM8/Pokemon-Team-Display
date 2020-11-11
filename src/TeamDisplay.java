@@ -1,23 +1,29 @@
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import helper.AutocompleteJComboBox;
 import helper.StringSearchable;
 
 @SuppressWarnings("serial")
 public class TeamDisplay extends JFrame {
-    private JPanel panel;
+    private Panel panel;
     private List<String> dex = Arrays.asList("bulbasaur", "ivysaur",
             "venusaur", "charmander", "charmeleon", "charizard", "squirtle",
             "wartortle", "blastoise", "caterpie", "metapod", "butterfree",
@@ -144,16 +150,31 @@ public class TeamDisplay extends JFrame {
         setLayout(new GridLayout(2, 1));
         add(panel);
 
+        // Menu
+        JMenuBar menuBar = new JMenuBar();
+        JMenu file = new JMenu("File");
+        JMenuItem save = new JMenuItem("Save");
+        JMenuItem load = new JMenuItem("Load");
+
+        save.addActionListener(e -> saveTeam());
+
+        load.addActionListener(e -> loadTeam());
+
+        file.add(save);
+        file.add(load);
+        menuBar.add(file);
+        setJMenuBar(menuBar);
+
         // Underneath
         JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         JPanel inp1 = new JPanel(new GridLayout(5, 2));
-        
+
         // Pokemon
         inp1.add(new JLabel("Pokemon Name"));
         StringSearchable searchable = new StringSearchable(dex);
         AutocompleteJComboBox pName = new AutocompleteJComboBox(searchable);
         inp1.add(pName);
-        
+
         // Nickname
         inp1.add(new JLabel("Nickname"));
         JTextField nName = new JTextField(10);
@@ -163,63 +184,56 @@ public class TeamDisplay extends JFrame {
 
         // Add to team
         JButton add = new JButton("Add To Team");
-        add.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int inParty = ((Panel) panel).getTeamSize();
-                if (inParty < 6) {
-                    inParty++;
-                    String num = getDexNum(pName.getText());
-                    if (!num.equals("N/A")) {
-                        String name = nName.getText();
-                        if (name.isEmpty())
-                            name = pName.getText().substring(0, 1).toUpperCase() + pName.getText().substring(1);
-                        TeamMember t = new TeamMember(num, name, inParty);
-                        ((Panel) panel).addToTeam(t);
-                    }
+
+        add.addActionListener(e -> {
+            int inParty = panel.getTeamSize();
+            if (inParty < 6) {
+                inParty++;
+                String num = getDexNum(pName.getText());
+                if (!num.equals("N/A")) {
+                    String name = nName.getText();
+                    if (name.isEmpty())
+                        name = pName.getText().substring(0, 1).toUpperCase()
+                                + pName.getText().substring(1);
+                    TeamMember t = new TeamMember(num, name, inParty);
+                    panel.addToTeam(t);
                 }
-                pName.setText("");
-                nName.setText("");
             }
+            pName.setText("");
+            nName.setText("");
         });
+
         inp1.add(add);
         inp1.add(Box.createHorizontalGlue());
 
         // Remove from team
         JTextField index = new JTextField(5);
         JButton remove = new JButton("Remove From Team");
-        remove.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String num = index.getText();
-                int n = Integer.parseInt(num);
-                if (n > 0 && n <= 6)
-                    ((Panel) panel).removeFromTeam(n);
-                index.setText("");
-            }
+        remove.addActionListener(e -> {
+            int n = Integer.parseInt(index.getText());
+            if (n > 0 && n <= 6)
+                panel.removeFromTeam(n);
+            index.setText("");
         });
         inp1.add(remove);
         inp1.add(index);
 
         // Change in case of mistake
         JButton makeChange = new JButton("Change");
-        makeChange.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String newPoke = pName.getText();
-                String newName = nName.getText();
-                String slot = index.getText();
-                if (slot != "") {
-                    int num = Integer.parseInt(slot);
-                    if (num > 0 && num <= ((Panel) panel).getTeamSize()) {
-                        newPoke = getDexNum(newPoke);
-                        ((Panel) panel).changeMember(num, newPoke, newName);
-                    }
+        makeChange.addActionListener(e -> {
+            String newPoke = pName.getText();
+            String newName = nName.getText();
+            String slot = index.getText();
+            if (slot != "") {
+                int num = Integer.parseInt(slot);
+                if (num > 0 && num <= ((Panel) panel).getTeamSize()) {
+                    newPoke = getDexNum(newPoke);
+                    panel.changeMember(num, newPoke, newName);
                 }
-                pName.setText("");
-                nName.setText("");
-                index.setText("");
             }
+            pName.setText("");
+            nName.setText("");
+            index.setText("");
         });
         inp1.add(makeChange);
 
@@ -230,13 +244,71 @@ public class TeamDisplay extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public String getDexNum(String poke) {
+    private String getDexNum(String poke) {
         poke = poke.toLowerCase();
-        if (dex.contains(poke)) {
-            int index = dex.indexOf(poke) + 1;
-            return String.format("%03d", index);
-        }
+        if (dex.contains(poke))
+            return String.format("%03d", dex.indexOf(poke) + 1);
         return "N/A";
+    }
+
+    private void saveTeam() {
+        TeamMember[] team = panel.getTeam();
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Specify a file to save");
+        fc.setFileFilter(
+                new FileNameExtensionFilter("TEXT FILES", "txt", "text"));
+        File f;
+        if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+            f = fc.getSelectedFile();
+        else
+            return;
+        String path = f.getAbsolutePath();
+        if (!path.endsWith(".txt"))
+            f = new File(path + ".txt");
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(f, "UTF-8");
+            for (TeamMember m : team)
+                if (m != null)
+                    writer.write(m.getDexNum() + "\t" + m.getNick() + "\n");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (writer != null)
+                writer.close();
+        }
+
+    }
+
+    private void loadTeam() {
+        JFileChooser fc = new JFileChooser();
+        fc.setFileFilter(
+                new FileNameExtensionFilter("TEXT FILES", "txt", "text"));
+        File f;
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            f = fc.getSelectedFile();
+        else
+            return;
+        try {
+            List<String> lines = Files.readAllLines(f.toPath());
+            if (lines.size() == 0 || lines.size() > 6)
+                return;
+            int teamSize = panel.getTeamSize();
+            for (String l : lines) {
+                String[] poke = l.split("\t");
+                if (poke.length != 2) {
+                    panel.clearTeam();
+                    return;
+                }
+                teamSize++;
+                panel.addToTeam(new TeamMember(poke[0], poke[1], teamSize));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
